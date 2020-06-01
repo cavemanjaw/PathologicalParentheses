@@ -229,8 +229,10 @@ void AddParentheseVla(int nrOfParentheses, bool (*finalHandler)(ParentheseClass*
 
 int main()
 {
-	//This is computing false for case of one parenthese!
-	AddParentheseVla(2, &SaveResults);//Skad argumenty wziac? Jak przekazac adres large buffer do skopiowania????
+	// This is computing false for case of one parenthese!
+   // How to pass the argument and the arge buffer for copying
+   // Bind the arguments by std::bind
+	AddParentheseVla(2, &SaveResults);
 	
 	
 	return 0;
