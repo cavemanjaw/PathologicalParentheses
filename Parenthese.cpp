@@ -2,6 +2,7 @@
 #include <string>
 #include <climits>
 #include <assert.h>
+#include <functional>
 
 class ParentheseClass
 {
@@ -50,6 +51,7 @@ public:
 	}
 	
 	// Write it in a way that won't have to check for self-assignment
+	// for example copy-and-swap idiom, which offers strong exception guarantee
 	ParentheseClass& operator=(const ParentheseClass& rhs)
 	{
 		allocatedStringSize = rhs.allocatedStringSize;
@@ -103,8 +105,8 @@ public:
 		assert(allocatedStringSize - 1 >= locationToPutParenthese);
 		
 		string[numberOfLeftAllocatedParentheses + numberOfRightAllocatedParentheses] = ')';
-		--numberOfRightAllocableParentheses;
 		++numberOfRightAllocatedParentheses;
+		--numberOfRightAllocableParentheses;
 	}
 
 	int GetAllocableRight()
@@ -175,7 +177,8 @@ void RearrangeBuffer(ParentheseClass* buffer, int newlyAllocatedObjects, int all
 }
 
 // VLA and stack buffers allocation?
-void AddParentheseVla(int nrOfParentheses, bool (*finalHandler)(ParentheseClass*, ParentheseClass*, size_t))
+// void AddParentheseVla(int nrOfParentheses, bool (*finalHandler)(ParentheseClass*, ParentheseClass*, size_t))
+void AddParentheseVla(int nrOfParentheses, std::function<bool(ParentheseClass*, ParentheseClass*, size_t)> finalHandler)
 {	
 	unsigned maxIterations = 2 * nrOfParentheses - 1;
 	unsigned bufferSize = (1U << maxIterations) + (1U << (maxIterations - 1));
@@ -229,11 +232,16 @@ void AddParentheseVla(int nrOfParentheses, bool (*finalHandler)(ParentheseClass*
 
 int main()
 {
-	// This is computing false for case of one parenthese!
-   // How to pass the argument and the arge buffer for copying
-   // Bind the arguments by std::bind
-	AddParentheseVla(2, &SaveResults);
-	
-	
-	return 0;
+  // This is computing false for case of one parenthese!
+  // How to pass the argument and the arge buffer for copying
+  // Bind the arguments by std::bind
+  //AddParentheseVla(2, &SaveResults);
+
+  ParentheseClass source;
+  ParentheseClass destination;
+  int magicTemporaryNumber = 6;
+  //void* ptr = malloc(sizeof(numOfBytes - the result);
+  AddParentheseVla(2, std::bind(&SaveResults, &source, &destination, magicTemporaryNumber));
+
+  return 0;
 }
