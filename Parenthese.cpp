@@ -237,6 +237,7 @@ int main()
   // Bind the arguments by std::bind
   //AddParentheseVla(2, &SaveResults);
 
+  // Bind does make a copy of its arguments unless I wrap it in std::reference_wrapper
   ParentheseClass source;
   ParentheseClass destination;
   int magicTemporaryNumber = 6;
